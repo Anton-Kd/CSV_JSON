@@ -1,20 +1,16 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
-
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-
 import java.util.List;
 
-public class Main {
+public class CSV_JSON {
+
+
     public static void main(String[] args) {
 
         String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
@@ -33,7 +29,7 @@ public class Main {
         List<Employee> list = parseCSV(columnMapping, fileName);
         list.forEach(System.out::println);
 
-        String json = listToJson(list);
+        String json = ConverterToJSON.listToJson(list, "");
         System.out.println(json);
     }
 
@@ -52,22 +48,4 @@ public class Main {
         }
         return list;
     }
-
-    public static String listToJson(List<Employee> list) {
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        Gson gson = builder.create();
-        Type listType = new TypeToken<List<Employee>>() {
-        }.getType();
-        String json = gson.toJson(list, listType);
-        try (FileWriter file = new
-                FileWriter("new_data.json")) {
-            file.write(json);
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return json;
-    }
 }
-
